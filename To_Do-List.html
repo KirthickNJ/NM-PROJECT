@@ -1,0 +1,490 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1" /> 
+<title>Professional Task Manager</title> 
+<style> 
+/* Reset */ 
+* { 
+margin: 0; 
+padding: 0; 
+box-sizing: border-box; 
+} 
+ 
+body, html { 
+height: 100%; 
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+background: #6aa9d6; /* soft blue background */ 
+color: #fefefe; 
+display: flex; 
+justify-content: center; 
+align-items: flex-start; 
+padding: 40px 20px; 
+min-height: 100vh; 
+ 
+ 
+5. Version Control (GitHub) 
+Maintaining clean and organized version control is crucial for project management, especially 
+in team environments. 
+ 
+ Frequent Commits: 
+Commit changes regularly with descriptive commit messages (e.g., “Implement task 
+deletion feature” or “Fix bug in task completion toggle”) to document your progress 
+clearly. 
+ Branching Strategy: 
+Use feature branches for new functionalities or bug fixes to avoid conflicts and make 
+code reviews easier. Merge branches back into the main branch only after thorough 
+testing. 
+ Push to Remote Repository: 
+Regularly push your local commits to GitHub or similar platforms to ensure your 
+work is backed up and accessible to collaborators. 
+ Documentation: 
+Maintain a clear and comprehensive README file that includes project setup 
+instructions, feature descriptions, and contribution guidelines. This facilitates 
+onboarding new team members and future maintenance. 
+ 
+6. Code 
+ 
+} 
+ 
+.app-container { 
+background: #1c2946; /* dark navy */ 
+border-radius: 12px; 
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); 
+width: 100%; 
+max-width: 600px; 
+padding: 30px 40px 40px; 
+} 
+ 
+h1 { 
+font-weight: 900; 
+font-size: 3rem; 
+margin-bottom: 10px; 
+letter-spacing: 0.12em; 
+text-align: center; 
+user-select: none; 
+} 
+ 
+.subheading { 
+font-weight: 600; 
+font-size: 1.1rem; 
+margin-bottom: 30px; 
+opacity: 0.8; 
+text-align: center; 
+letter-spacing: 0.07em; 
+user-select: none; 
+} 
+ 
+/* Input Form */ 
+.task-form { 
+display: flex; 
+flex-wrap: wrap; 
+gap: 16px; 
+justify-content: center; 
+margin-bottom: 30px; 
+} 
+ 
+.task-form input[type="text"], 
+.task-form input[type="date"] { 
+flex: 1 1 160px; 
+padding: 12px 15px; 
+border-radius: 8px; 
+border: none; 
+font-size: 1rem; 
+outline-offset: 2px; 
+transition: outline-color 0.25s ease; 
+} 
+ 
+.task-form input[type="text"]:focus, 
+.task-form input[type="date"]:focus { 
+outline: 3px solid #92d1ff; 
+background: #2a3b67; 
+color: #fefefe; 
+} 
+ 
+.task-form button { 
+padding: 12px 40px; 
+background: #fff; 
+color: #0f4a83; 
+font-weight: 700; 
+border: none; 
+border-radius: 9999px; 
+cursor: pointer; 
+letter-spacing: 0.1em; 
+text-transform: uppercase; 
+transition: background-color 0.3s ease, color 0.3s ease; 
+box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+} 
+ 
+.task-form button:disabled { 
+background: #a0aec0; 
+cursor: not-allowed; 
+color: #475569; 
+box-shadow: none; 
+} 
+ 
+.task-form button:not(:disabled):hover { 
+background: #0f4a83; 
+color: white; 
+box-shadow: 0 6px 16px rgba(0,0,0,0.25); 
+} 
+ 
+/* Task List */ 
+ul.task-list { 
+list-style: none; 
+max-height: 400px; 
+overflow-y: auto; 
+padding-right: 6px; 
+} 
+ 
+ul.task-list::-webkit-scrollbar { 
+width: 6px; 
+} 
+ul.task-list::-webkit-scrollbar-thumb { 
+background-color: #3a4e78; 
+border-radius: 10px; 
+} 
+ 
+.task-item { 
+background: #2a3b67; 
+border-radius: 10px; 
+margin-bottom: 16px; 
+padding: 16px 20px; 
+display: flex; 
+flex-direction: column; 
+box-shadow: 0 2px 10px rgba(0,0,0,0.15); 
+} 
+ 
+.task-item.completed { 
+opacity: 0.6; 
+text-decoration: line-through; 
+} 
+ 
+.task-top { 
+display: flex; 
+align-items: center; 
+justify-content: space-between; 
+gap: 15px; 
+} 
+ 
+.task-checkbox { 
+width: 22px; 
+height: 22px; 
+cursor: pointer; 
+} 
+ 
+.task-title { 
+flex: 1; 
+font-weight: 600; 
+font-size: 1.1rem; 
+color: #e1eaff; 
+outline-offset: 3px; 
+} 
+ 
+.task-title[contenteditable="true"]:focus { 
+outline: 3px solid #92d1ff; 
+background: #425b94; 
+border-radius: 6px; 
+} 
+ 
+.delete-btn { 
+background: transparent; 
+border: none; 
+color: #f87171; 
+font-size: 1.4rem; 
+cursor: pointer; 
+user-select: none; 
+transition: color 0.3s ease; 
+} 
+ 
+.delete-btn:hover { 
+color: #ef4444; 
+} 
+ 
+.dates-row { 
+margin-top: 12px; 
+display: flex; 
+gap: 20px; 
+} 
+ 
+.date-field { 
+display: flex; 
+flex-direction: column; 
+font-size: 0.85rem; 
+color: #a3bffa; 
+font-weight: 600; 
+} 
+ 
+.date-field label { 
+margin-bottom: 4px; 
+} 
+ 
+.date-field input[type="date"] { 
+padding: 6px 10px; 
+border-radius: 6px; 
+border: none; 
+background: #1f2a4f; 
+color: #fefefe; 
+font-weight: 600; 
+outline-offset: 2px; 
+transition: outline-color 0.25s ease; 
+} 
+ 
+.date-field input[type="date"]:focus { 
+outline: 3px solid #92d1ff; 
+} 
+ 
+@media (max-width: 480px) { 
+.task-form { 
+flex-direction: column; 
+align-items: stretch; 
+} 
+ 
+.task-form input[type="text"], 
+.task-form input[type="date"], 
+.task-form button { 
+flex: 1 1 auto; 
+width: 100%; 
+} 
+ 
+.dates-row { 
+flex-direction: column; 
+gap: 12px; 
+} 
+} 
+</style> 
+</head> 
+<body> 
+ 
+<div class="app-container" role="main" aria-label="Task Manager Application"> 
+<h1>Task Manager</h1> 
+<div class="subheading">Organize your tasks with start dates and 
+deadlines</div> 
+ 
+<form class="task-form" onsubmit="event.preventDefault(); addTask();" aria- 
+label="Add new task form"> 
+<input type="text" id="taskTitle" placeholder="Enter task title" aria- 
+label="Task title" required /> 
+<input type="date" id="taskStartDate" aria-label="Start date" required /> 
+<input type="date" id="taskDeadline" aria-label="Deadline" /> 
+<button type="submit" id="addBtn" disabled>Add Task</button> 
+</form> 
+ 
+<ul class="task-list" id="taskList" aria-live="polite" aria-label="Task 
+list"> 
+<!-- tasks go here --> 
+</ul> 
+</div> 
+ 
+<script> 
+const taskTitleInput = document.getElementById('taskTitle'); 
+const taskStartDateInput = document.getElementById('taskStartDate'); 
+const taskDeadlineInput = document.getElementById('taskDeadline'); 
+const addBtn = document.getElementById('addBtn'); 
+const taskList = document.getElementById('taskList'); 
+ 
+let tasks = []; 
+ 
+// Initialize start date input to today 
+function getTodayISO() { 
+return new Date().toISOString().slice(0, 10); 
+} 
+ 
+taskStartDateInput.value = getTodayISO(); 
+ 
+function validateInputs() { 
+const titleValid = taskTitleInput.value.trim().length > 0; 
+const startDateValid = taskStartDateInput.value !== ''; 
+const deadlineVal = taskDeadlineInput.value; 
+const startDateVal = taskStartDateInput.value; 
+ 
+// deadline (if set) must be >= start date 
+const deadlineValid = !deadlineVal || (deadlineVal >= startDateVal); 
+ 
+addBtn.disabled = !(titleValid && startDateValid && deadlineValid); 
+} 
+ 
+taskTitleInput.addEventListener('input', validateInputs); 
+taskStartDateInput.addEventListener('input', validateInputs); 
+taskDeadlineInput.addEventListener('input', validateInputs); 
+ 
+function saveTasks() { 
+localStorage.setItem('tasks', JSON.stringify(tasks)); 
+} 
+ 
+function loadTasks() { 
+const stored = localStorage.getItem('tasks'); 
+if (stored) { 
+tasks = JSON.parse(stored); 
+} 
+} 
+ 
+function renderTasks() { 
+taskList.innerHTML = ''; 
+if (tasks.length === 0) { 
+taskList.innerHTML = `<li style="color:#9bb0d3; text-align:center; 
+margin-top: 20px;">No tasks yet, add one above!</li>`; 
+return; 
+} 
+ 
+tasks.forEach((task, index) => { 
+const li = document.createElement('li'); 
+li.className = 'task-item' + (task.completed ? ' completed' : ''); 
+ 
+const topRow = document.createElement('div'); 
+topRow.className = 'task-top'; 
+ 
+// Checkbox 
+const checkbox = document.createElement('input'); 
+checkbox.type = 'checkbox'; 
+checkbox.className = 'task-checkbox'; 
+checkbox.checked = task.completed; 
+checkbox.setAttribute('aria-label', `Mark task "${task.title}" as 
+complete`); 
+checkbox.addEventListener('change', () => { 
+tasks[index].completed = checkbox.checked; 
+saveTasks(); 
+renderTasks(); 
+}); 
+ 
+// Title (contenteditable when not completed) 
+const titleSpan = document.createElement('span'); 
+titleSpan.className = 'task-title'; 
+titleSpan.textContent = task.title; 
+titleSpan.contentEditable = !task.completed; 
+titleSpan.spellcheck = false; 
+titleSpan.setAttribute('role', 'textbox'); 
+titleSpan.setAttribute('aria-label', `Edit task title: ${task.title}`); 
+titleSpan.tabIndex = 0; 
+ 
+titleSpan.addEventListener('blur', () => { 
+const newText = titleSpan.textContent.trim(); 
+if (newText === '') { 
+titleSpan.textContent = tasks[index].title; // revert if empty 
+} else { 
+tasks[index].title = newText; 
+saveTasks(); 
+renderTasks(); 
+} 
+}); 
+ 
+titleSpan.addEventListener('keydown', e => { 
+if (e.key === 'Enter') { 
+e.preventDefault(); 
+titleSpan.blur(); 
+} 
+}); 
+ 
+// Delete button 
+const deleteBtn = document.createElement('button'); 
+deleteBtn.className = 'delete-btn'; 
+deleteBtn.innerHTML = '&times;'; 
+deleteBtn.setAttribute('aria-label', `Delete task: ${task.title}`); 
+deleteBtn.addEventListener('click', () => { 
+tasks.splice(index, 1); 
+saveTasks(); 
+renderTasks(); 
+}); 
+ 
+topRow.appendChild(checkbox); 
+topRow.appendChild(titleSpan); 
+topRow.appendChild(deleteBtn); 
+ 
+// Dates row 
+const datesRow = document.createElement('div'); 
+datesRow.className = 'dates-row'; 
+ 
+// Start date 
+const startDateField = document.createElement('div'); 
+startDateField.className = 'date-field'; 
+ 
+const startLabel = document.createElement('label'); 
+startLabel.textContent = 'Start Date'; 
+ 
+const startInput = document.createElement('input'); 
+startInput.type = 'date'; 
+startInput.value = task.startDate || getTodayISO(); 
+startInput.disabled = task.completed; 
+startInput.addEventListener('change', () => { 
+if (task.deadline && startInput.value > task.deadline) { 
+alert('Start date cannot be after deadline!'); 
+startInput.value = task.startDate; 
+return; 
+} 
+tasks[index].startDate = startInput.value; 
+saveTasks(); 
+renderTasks(); 
+}); 
+ 
+startDateField.appendChild(startLabel); 
+startDateField.appendChild(startInput); 
+ 
+// Deadline 
+const deadlineField = document.createElement('div'); 
+deadlineField.className = 'date-field'; 
+ 
+const deadlineLabel = document.createElement('label'); 
+deadlineLabel.textContent = 'Deadline'; 
+ 
+const deadlineInput = document.createElement('input'); 
+deadlineInput.type = 'date'; 
+deadlineInput.value = task.deadline || ''; 
+deadlineInput.disabled = task.completed; 
+deadlineInput.addEventListener('change', () => { 
+if (deadlineInput.value < task.startDate) { 
+alert('Deadline cannot be before start date!'); 
+deadlineInput.value = task.deadline; 
+return; 
+} 
+tasks[index].deadline = deadlineInput.value; 
+saveTasks(); 
+renderTasks(); 
+}); 
+ 
+deadlineField.appendChild(deadlineLabel); 
+deadlineField.appendChild(deadlineInput); 
+ 
+datesRow.appendChild(startDateField); 
+datesRow.appendChild(deadlineField); 
+ 
+li.appendChild(topRow); 
+li.appendChild(datesRow); 
+ 
+taskList.appendChild(li); 
+}); 
+} 
+ 
+function addTask() { 
+const title = taskTitleInput.value.trim(); 
+const startDate = taskStartDateInput.value; 
+const deadline = taskDeadlineInput.value; 
+ 
+if (!title || !startDate) return; 
+ 
+if (deadline && deadline < startDate) { 
+alert('Deadline cannot be before start date!'); 
+return; 
+} 
+ 
+tasks.push({ 
+title, 
+startDate, 
+deadline, 
+completed: false, 
+}); 
+ 
+saveTasks(); 
+renderTasks(); 
+taskTitleInput.value = ''; 
+taskStartDateInput.value = getTodayISO(); 
+taskDeadlineInput.value = ''; 
+addBtn.disabled = true; 
+taskTitleInput.focus(); 
+} 
+validateInputs(); 
+loadTasks(); 
+renderTasks(); 
+</script> 
+</body> 
+</html> 
